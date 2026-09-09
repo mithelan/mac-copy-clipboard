@@ -8,7 +8,7 @@ final class HistoryViewModel: ObservableObject {
     }
     @Published var selectedIndex: Int = 0
 
-    private var allItems: [HistoryItem] = []
+    private(set) var allItems: [HistoryItem] = []
 
     func refresh() {
         allItems = HistoryStore.shared.items
@@ -51,8 +51,19 @@ final class HistoryViewModel: ObservableObject {
         return item
     }
 
-    func select(_ item: HistoryItem) {
-        copyToPasteboard(item)
+    func remove(_ item: HistoryItem) {
+        HistoryStore.shared.remove(item)
+        refresh()
+    }
+
+    func removeSelected() {
+        guard items.indices.contains(selectedIndex) else { return }
+        remove(items[selectedIndex])
+    }
+
+    func clearAll() {
+        HistoryStore.shared.clear()
+        refresh()
     }
 
     private func copyToPasteboard(_ item: HistoryItem) {

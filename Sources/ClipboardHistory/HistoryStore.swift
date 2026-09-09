@@ -55,6 +55,16 @@ final class HistoryStore {
         return NSImage(contentsOf: imagesDir.appendingPathComponent(name))
     }
 
+    func remove(_ item: HistoryItem) {
+        guard let index = items.firstIndex(where: { $0.id == item.id }) else { return }
+        let removed = items.remove(at: index)
+        if let name = removed.imageFileName {
+            try? FileManager.default.removeItem(at: imagesDir.appendingPathComponent(name))
+        }
+        save()
+        onChange?()
+    }
+
     func clear() {
         items.removeAll()
         try? FileManager.default.removeItem(at: imagesDir)

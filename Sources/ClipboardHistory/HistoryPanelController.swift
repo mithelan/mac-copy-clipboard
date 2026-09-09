@@ -124,6 +124,9 @@ final class HistoryPanelController: NSObject, NSWindowDelegate {
             case 53: // escape
                 self.close()
                 return nil
+            case 51, 117: // delete / forward delete
+                self.viewModel.removeSelected()
+                return nil
             default:
                 return event
             }

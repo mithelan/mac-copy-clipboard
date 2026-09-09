@@ -5,6 +5,7 @@ struct HistoryView: View {
     var onConfirm: () -> Void
     var onDismiss: () -> Void
     @FocusState private var searchFocused: Bool
+    @State private var hoveredIndex: Int?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -14,6 +15,18 @@ struct HistoryView: View {
                 TextField("Search clipboard history", text: $viewModel.searchText)
                     .textFieldStyle(.plain)
                     .focused($searchFocused)
+
+                Button {
+                    viewModel.clearAll()
+                } label: {
+                    Text("Clear")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
+                .opacity(viewModel.allItems.isEmpty ? 0 : 1)
+                .disabled(viewModel.allItems.isEmpty)
+                .help("Clear all clipboard history")
             }
             .padding(10)
 
@@ -21,19 +34,30 @@ struct HistoryView: View {
 
             if viewModel.items.isEmpty {
                 Spacer()
-                Text("No clipboard history yet")
+                Text(viewModel.allItems.isEmpty ? "No clipboard history yet" : "No matches")
                     .foregroundColor(.secondary)
                 Spacer()
             } else {
                 ScrollViewReader { proxy in
                     List(Array(viewModel.items.enumerated()), id: \.element.id) { index, item in
-                        HistoryRow(item: item, isSelected: index == viewModel.selectedIndex, viewModel: viewModel)
-                            .id(index)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                viewModel.selectedIndex = index
-                                onConfirm()
+                        HistoryRow(
+                            item: item,
+                            isSelected: index == viewModel.selectedIndex,
+                            isHovered: hoveredIndex == index,
+                            viewModel: viewModel,
+                            onDelete: {
+                                viewModel.remove(item)
                             }
+                        )
+                        .id(index)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            viewModel.selectedIndex = index
+                            onConfirm()
+                        }
+                        .onHover { isInside in
+                            hoveredIndex = isInside ? index : (hoveredIndex == index ? nil : hoveredIndex)
+                        }
                     }
                     .listStyle(.plain)
                     .onChange(of: viewModel.selectedIndex) {
@@ -44,7 +68,7 @@ struct HistoryView: View {
 
             Divider()
             HStack {
-                Text("\u{2191}\u{2193} navigate \u{00B7} \u{21B5} paste \u{00B7} esc close")
+                Text("\u{2191}\u{2193} navigate \u{00B7} \u{21B5} paste \u{00B7} \u{232B} delete \u{00B7} esc close")
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
@@ -64,7 +88,9 @@ struct HistoryView: View {
 struct HistoryRow: View {
     let item: HistoryItem
     let isSelected: Bool
+    let isHovered: Bool
     @ObservedObject var viewModel: HistoryViewModel
+    var onDelete: () -> Void
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
@@ -101,10 +127,23 @@ struct HistoryRow: View {
                 }
             }
             Spacer()
+
+            if isHovered {
+                Button(action: onDelete) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
+                .help("Remove this item")
+            }
         }
         .padding(.vertical, 4)
         .padding(.horizontal, 6)
-        .background(isSelected ? Color.accentColor.opacity(0.2) : Color.clear)
+        .background(
+            isSelected ? Color.accentColor.opacity(0.2)
+                : isHovered ? Color.secondary.opacity(0.1)
+                : Color.clear
+        )
         .cornerRadius(6)
     }
 }
