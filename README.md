@@ -18,6 +18,17 @@ by pressing **⌘⇧V** from anywhere.
   `~/Library/Application Support/ClipboardHistory/`. Only the 10 most
   recent items are kept — older ones are dropped automatically.
 
+## Download
+
+Grab the latest build from
+[Releases](https://github.com/mithelan/mac-copy-clipboard/releases) — no
+building required. Unzip it, then see **Install & run** below.
+
+> The app is ad-hoc signed, not notarized (that requires a paid Apple
+> Developer account), so Gatekeeper will flag it as being from an
+> unidentified developer the first time you open it. Right-click the app →
+> **Open** → **Open** to confirm — you only need to do this once.
+
 ## Screenshots
 
 | History panel (⌘⇧V) | Menu bar |
