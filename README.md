@@ -18,6 +18,12 @@ by pressing **⌘⇧V** from anywhere.
   `~/Library/Application Support/ClipboardHistory/`. Only the 10 most
   recent items are kept — older ones are dropped automatically.
 
+## Screenshots
+
+| History panel (⌘⇧V) | Menu bar |
+| --- | --- |
+| ![History panel showing search, clear button, and item list](screenshots/history-panel.png) | ![Menu bar dropdown with Show History, Clear History, and Quit](screenshots/menu-bar.png) |
+
 ## Build
 
 No Xcode installation required — just the Swift toolchain that ships with
