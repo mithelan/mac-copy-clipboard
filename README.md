@@ -34,7 +34,14 @@ cd ClipboardHistory
 ./build.sh
 ```
 
-This produces `ClipboardHistory.app` in this folder, ad-hoc signed.
+This produces `ClipboardHistory.app` in this folder, ad-hoc signed, with the
+app icon (`AppIcon.icns`) baked in. To regenerate the icon after tweaking its
+design, edit `Icon/generate_icon.swift` and run:
+
+```bash
+swift Icon/generate_icon.swift Icon/AppIcon.iconset
+iconutil -c icns Icon/AppIcon.iconset -o AppIcon.icns
+```
 
 > Note: `swift build` (Swift Package Manager) is broken on some
 > Command-Line-Tools-only installs due to a manifest-linking bug unrelated to

@@ -23,6 +23,7 @@ swiftc "$SRC_DIR"/*.swift \
     -framework Combine
 
 cp Info.plist "$APP_DIR/Contents/Info.plist"
+cp AppIcon.icns "$APP_DIR/Contents/Resources/AppIcon.icns"
 
 echo "Signing (ad-hoc)..."
 codesign --force --deep --sign - "$APP_DIR" >/dev/null 2>&1 || true
