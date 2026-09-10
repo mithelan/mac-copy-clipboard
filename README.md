@@ -1,5 +1,7 @@
 # Clipboard History
 
+![Clipboard History — every copy & screenshot, one hotkey away](marketing/cover.png)
+
 A tiny macOS menu bar app that keeps a running history of everything you copy
 (text and images) plus screenshots you take, and lets you pick one to paste
 by pressing **⌘⇧V** from anywhere.
@@ -34,6 +36,21 @@ building required. Unzip it, then see **Install & run** below.
 | History panel (⌘⇧V) | Menu bar |
 | --- | --- |
 | ![History panel showing search, clear button, and item list](screenshots/history-panel.png) | ![Menu bar dropdown with Show History, Clear History, and Quit](screenshots/menu-bar.png) |
+
+## Marketing assets
+
+`marketing/cover.png` (1280×640, GitHub's recommended social-preview size —
+upload it at **repo Settings → General → Social preview**) and
+`marketing/thumbnail.png` (1200×1200 square, for anywhere a square card
+works better than a wide banner) are generated the same way as the app icon.
+To tweak the design and regenerate both:
+
+```bash
+swift marketing/generate_marketing.swift marketing/output
+sips -z 640 1280 marketing/output/cover.png -o marketing/cover.png
+sips -z 1200 1200 marketing/output/thumbnail.png -o marketing/thumbnail.png
+rm -rf marketing/output
+```
 
 ## Build
 
